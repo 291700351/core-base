@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TMDB</string>
+
+    <string name="txt_click_to_exit">再次点击退出程序</string>
+
+    <string name="txt_movie">电影</string>
+    <string name="txt_tv">电视</string>
+    <string name="txt_personal">我的</string>
+
+
+</resources>
