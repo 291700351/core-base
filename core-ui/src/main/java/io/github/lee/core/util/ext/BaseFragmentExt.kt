@@ -8,12 +8,12 @@ import androidx.navigation.fragment.findNavController
 import io.github.lee.core.ui.BaseFragment
 import io.github.lee.core.util.LoggerUtil
 
-fun BaseFragment<*, *>.log(msg: Any?) {
+fun BaseFragment<*, *>.log(msg: Any?, checkJsonOrXml: Boolean = false) {
     if (null == msg) {
         LoggerUtil.w("The information you print is null, Please check it")
         return
     }
-    LoggerUtil.e(msg)
+    LoggerUtil.log(msg, checkJsonOrXml)
 }
 
 inline fun <reified T> BaseFragment<*, *>.getArgumentValue(key: String, defaultValue: T?): T? {
@@ -39,12 +39,6 @@ inline fun <reified T> BaseFragment<*, *>.getArgumentSerializable(key: String): 
     } else {
         null
     }
-}
-
-@Px
-fun BaseFragment<*, *>.dp2px(dipValue: Float): Int {
-    val scale: Float = resources.displayMetrics.density
-    return (dipValue * scale + 0.5f).toInt()
 }
 
 fun <T> BaseFragment<*, *>.observe(liveData: LiveData<T>?, observer: Observer<T>) =

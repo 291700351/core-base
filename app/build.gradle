@@ -24,26 +24,40 @@ android {
         dataBinding = true
     }
 
+    signingConfigs {
+        //加载签名配置文件
+        config {
+            storeFile file(rootDir.getAbsolutePath() + File.separator + "sign" + File.separator + "key.jks")
+            storePassword "123456"
+            keyAlias "tmdb"
+            keyPassword "123456"
+            setV1SigningEnabled(true)
+            setV2SigningEnabled(true)
+        }
+    }
+
     buildTypes {
         debug {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            //            signingConfig signingConfigs.config
+            signingConfig signingConfigs.config
             shrinkResources true
             zipAlignEnabled true
             debuggable true
             jniDebuggable true
             renderscriptDebuggable true
+            multiDexEnabled true
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            //            signingConfig signingConfigs.config
+            signingConfig signingConfigs.config
             shrinkResources true
             zipAlignEnabled true
             debuggable false
             jniDebuggable false
             renderscriptDebuggable false
+            multiDexEnabled true
         }
     }
     compileOptions {
@@ -53,21 +67,27 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-    }
+
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+    lintOptions {
+        showAll = true
+        disable = [
+                "Instantiatable", //解决清单文件Activity继承的警告
+                "UnusedResources" //资源未使用的警告
+        ]
+    }
 }
 
 dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
     implementation 'androidx.activity:activity-compose:1.3.1'
     testImplementation 'junit:junit:4.13.2'
@@ -75,18 +95,16 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation project(":core-ui")
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
     // Hilt Support
-    implementation "com.google.dagger:hilt-android:2.37"
-    kapt "com.google.dagger:hilt-android-compiler:2.37"
+    implementation 'com.google.dagger:hilt-android:2.41'
+    kapt 'com.google.dagger:hilt-android-compiler:2.41'
 
     // Network
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.2"
-    implementation "com.squareup.okhttp3:okhttp:4.9.2"
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.5'
 
     // Room Support
     kapt "androidx.room:room-compiler:2.4.1"

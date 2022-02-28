@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!--    <style name="SplashTheme" parent="Theme.TMDB">-->
+<!--        <item name="android:windowBackground">@android:color/transparent</item>-->
+<!--        <item name="android:windowSplashScreenAnimationDuration">0</item>-->
+<!--&lt;!&ndash;        <item name="android:windowSplashScreenAnimatedIcon">@drawable/layer_splash_center</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:windowSplashScreenBackground">@android:color/white</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:windowSplashScreenBrandingImage">@mipmap/img_splash</item>&ndash;&gt;-->
+<!--    </style>-->
+</resources>

@@ -2,7 +2,6 @@ package io.github.lee.core.util.ext
 
 import android.app.Activity
 import android.content.Intent
-import androidx.annotation.Px
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -12,12 +11,12 @@ import io.github.lee.core.ui.BaseActivity
 import io.github.lee.core.ui.BaseFragment
 import io.github.lee.core.util.LoggerUtil
 
-fun BaseActivity<*, *>.log(msg: Any?) {
+fun BaseActivity<*, *>.log(msg: Any?,checkJsonOrXml: Boolean = false) {
     if (null == msg) {
         LoggerUtil.w("The information you print is null, Please check it")
         return
     }
-    LoggerUtil.e(msg)
+    LoggerUtil.log(msg,checkJsonOrXml)
 }
 
 inline fun <reified T> BaseActivity<*, *>.getBundleValue(key: String, defaultValue: T?): T? {
@@ -45,11 +44,6 @@ inline fun <reified T> BaseActivity<*, *>.getBundleSerializable(key: String): T?
     }
 }
 
-@Px
-fun BaseActivity<*, *>.dp2px(dipValue: Float): Int {
-    val scale: Float = resources.displayMetrics.density
-    return (dipValue * scale + 0.5f).toInt()
-}
 
 fun <T> BaseActivity<*, *>.observe(liveData: LiveData<T>?, observer: Observer<T>) =
     liveData?.observe(this, observer)
@@ -73,5 +67,4 @@ fun BaseFragment<*, *>.putValueToGraph(vararg pairs: Pair<String, Any?>) {
             graph.addArgument(key, argument)
         }
     }
-
 }

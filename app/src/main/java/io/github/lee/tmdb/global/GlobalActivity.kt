@@ -1,11 +1,18 @@
 package io.github.lee.tmdb.global
 
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import androidx.annotation.Keep
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.lee.core.ui.BaseActivity
+import io.github.lee.core.util.ext.log
 import io.github.lee.core.vm.BaseViewModel
 import io.github.lee.tmdb.BuildConfig
 import io.github.lee.tmdb.R
@@ -14,10 +21,16 @@ import io.github.lee.tmdb.main.MainFragment
 import io.github.lee.tmdb.splash.SplashFragment
 
 private const val TIME_DIFF = 2 * 1000L
+private const val TIME_DELAY = 3 * 1000L
+
+val Context.dataStore by preferencesDataStore(BuildConfig.APPLICATION_ID)
+
 
 @Keep
 @AndroidEntryPoint
 class GlobalActivity : BaseActivity<ActivityGlobalBinding, BaseViewModel>() {
+    private var isReady = false
+
     private var preClickTime = 0L
     override fun onCreateVB() = ActivityGlobalBinding.inflate(layoutInflater)
     override fun onBackPressed() {
@@ -55,5 +68,16 @@ class GlobalActivity : BaseActivity<ActivityGlobalBinding, BaseViewModel>() {
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
         translucentStatusBar()
+        val view = findViewById<View>(android.R.id.content)
+        view.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                if (isReady) {
+                    view.viewTreeObserver.removeOnPreDrawListener(this)
+                }
+                return isReady
+            }
+        })
+        Handler(Looper.getMainLooper())
+            .postDelayed({ isReady = true }, TIME_DELAY)
     }
 }

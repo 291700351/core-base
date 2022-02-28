@@ -1,19 +1,15 @@
 package io.github.lee.tmdb.main.movie
 
-import android.content.Context
 import android.graphics.Color
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.lee.core.ui.BaseRefreshFragment
-import io.github.lee.core.util.DataStoreUtil
-import io.github.lee.core.util.ext.log
-import io.github.lee.tmdb.databinding.ToolbarBinding
-import kotlinx.coroutines.flow.first
+import io.github.lee.core.util.ext.sp
+import io.github.lee.tmdb.R
+import io.github.lee.tmdb.databinding.ToolbarGlobalCenterTitleBinding
 
-
-val Context.dataStore by preferencesDataStore("hello")
 
 @AndroidEntryPoint
 class MainMovieFragment : BaseRefreshFragment<MainMovieVM>() {
@@ -26,24 +22,28 @@ class MainMovieFragment : BaseRefreshFragment<MainMovieVM>() {
         ViewModelProvider(this)[MainMovieVM::class.java]
 
     override fun onCreateToolbar(): Toolbar {
-        return ToolbarBinding.inflate(layoutInflater).tl
+        val tl = ToolbarGlobalCenterTitleBinding.inflate(layoutInflater)
+        tl.title = "HeLLo"
+        tl.titleColor = Color.parseColor("#FF00FF")
+//        tl.titleSize = 18.sp(mContent)
+        tl.tl.setBackgroundColor(Color.YELLOW)
+        return tl.tl
     }
 
     override fun onSetViewData() {
         super.onSetViewData()
-        vm?.launchOnUI {
-            DataStoreUtil.instance(mContent.dataStore).savePreferences("lll", false)
-            val result = DataStoreUtil.instance(mContent.dataStore).readPreferences<Boolean>("lll")
-            log("result = ${result.first()}")
-        }
+        val tv = TextView(mContent)
+        tv.text = getString(R.string.app_name)
+        addHeaderView(tv)
     }
+
     //===Desc:=====================================================================================
 
     override fun onResume() {
         super.onResume()
         translucentStatusBar()
         view?.setBackgroundColor(Color.WHITE)
-        getToolbarRoot().fitsSystemWindows = true
+        getContentRoot().fitsSystemWindows = true
         lightStatusBars(true)
     }
 
