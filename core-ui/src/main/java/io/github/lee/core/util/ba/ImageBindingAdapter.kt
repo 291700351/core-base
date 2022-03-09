@@ -3,6 +3,8 @@ package io.github.lee.core.util.ba
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import coil.request.Disposable
+import coil.request.ImageRequest
 import io.github.lee.core.util.ext.loadImageWithTransform
 
 /**
@@ -12,14 +14,16 @@ import io.github.lee.core.util.ext.loadImageWithTransform
     value = ["load_url",
         "crossfade_time",
         "placeholder_res",
-        "error_res"],
+        "error_res",
+        "download_listener"],
     requireAll = false
 )
 fun ImageView.loadImage(
     url: String? = null,
     crossFadeTime: Int?,
     placeholder: Drawable?,
-    error: Drawable?
-) {
-    loadImageWithTransform(url, crossFadeTime, placeholder, error)
-}
+    error: Drawable?,
+    listener: ImageRequest.Listener? = null
+): Disposable? =
+    loadImageWithTransform(url, crossFadeTime, placeholder, error, listener)
+

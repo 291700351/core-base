@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package io.github.lee.core.ui
 
 import android.content.Context
@@ -25,7 +27,7 @@ import io.github.lee.core.vm.BaseViewModel
 import io.github.lee.core.vm.status.PageStatus
 import qiu.niorgai.StatusBarCompat
 
-open class BaseFragment<VB : ViewDataBinding, VM : BaseViewModel>
+abstract class BaseFragment<VB : ViewDataBinding, VM : BaseViewModel>
     : Fragment() {
     private val mToast by lazy {
         Toast.makeText(mContent, "", Toast.LENGTH_SHORT)
@@ -34,18 +36,22 @@ open class BaseFragment<VB : ViewDataBinding, VM : BaseViewModel>
 
     protected val vb: VB? by lazy { onCreateVB() }
     protected val vm: VM? by lazy { onCreateVM() }
-    protected open fun onCreateVB(): VB? = null
-    protected open fun onCreateVM(): VM? = null
+    protected abstract fun onCreateVB(): VB?
+    protected abstract fun onCreateVM(): VM?
 
     /**Toolbar是否悬浮在内容上*/
     protected open var isHover = false
-    protected lateinit var toolbarContainer: FrameLayout
-    protected lateinit var contentContainer: FrameLayout
+    private lateinit var toolbarContainer: FrameLayout
+    private lateinit var contentContainer: FrameLayout
 
     protected var mToolbar: Toolbar? = null
+        private set
     protected var loadingVb: ViewDataBinding? = null
+        private set
     protected var emptyVb: ViewDataBinding? = null
+        private set
     protected var errorVb: ViewDataBinding? = null
+
 
     //===Desc:=====================================================================================
 
@@ -289,7 +295,7 @@ open class BaseFragment<VB : ViewDataBinding, VM : BaseViewModel>
         StatusBarCompat.translucentStatusBar(a, hideStatusBarBackground)
     }
 
-    protected fun lightStatusBars(isBlack: Boolean = true) {
+    protected fun lightStatusBars(@Suppress("SameParameterValue") isBlack: Boolean = true) {
         val a = activity ?: return
         if (isBlack) {
             StatusBarCompat.changeToLightStatusBar(a)

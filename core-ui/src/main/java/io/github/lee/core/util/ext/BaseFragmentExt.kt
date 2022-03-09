@@ -1,7 +1,7 @@
 package io.github.lee.core.util.ext
 
+import android.os.Parcelable
 import androidx.annotation.IdRes
-import androidx.annotation.Px
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -41,6 +41,19 @@ inline fun <reified T> BaseFragment<*, *>.getArgumentSerializable(key: String): 
     }
 }
 
+@Suppress("UNCHECKED_CAST")
+inline fun <reified T : Parcelable> BaseFragment<*, *>.getArgumentParcelableArray(key: String): List<T> {
+    val bundle = arguments ?: return emptyList()
+    val parcelableArrayList = bundle.getParcelableArray(key)
+    return (parcelableArrayList?.toList() ?: emptyList()) as List<T>
+}
+
+inline fun <reified T : Parcelable> BaseFragment<*, *>.getArgumentParcelable(key: String): T? {
+    val bundle = arguments ?: return null
+    return bundle.getParcelable(key)
+
+}
+
 fun <T> BaseFragment<*, *>.observe(liveData: LiveData<T>?, observer: Observer<T>) =
     liveData?.observe(viewLifecycleOwner, observer)
 
@@ -64,6 +77,9 @@ fun BaseFragment<*, *>.navigate(@IdRes resId: Int) {
 
 fun BaseFragment<*, *>.popBackStack() {
     findNavController().popBackStack()
+}
+fun BaseFragment<*, *>.popBackStack(@IdRes destinationId: Int, inclusive: Boolean) {
+    findNavController().popBackStack(destinationId,inclusive)
 }
 
 fun BaseFragment<*, *>.navigateUp() {

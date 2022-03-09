@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable
 import android.text.TextUtils
 import android.widget.ImageView
 import coil.load
+import coil.request.Disposable
+import coil.request.ImageRequest
 import coil.transform.Transformation
 
 
@@ -12,15 +14,16 @@ fun ImageView.loadImageWithTransform(
     crossFadeTime: Int?,
     placeholder: Drawable?,
     error: Drawable?,
+    listener: ImageRequest.Listener? = null,
     vararg transform: Transformation
-) {
+): Disposable? {
     if (TextUtils.isEmpty(url)) {
         if (null != error) {
             setImageDrawable(error)
         }
-        return
+        return null
     }
-    load(url) {
+    return load(url) {
         if (null != crossFadeTime && crossFadeTime > 0) {
             crossfade(true)
             crossfade(crossFadeTime)
@@ -34,5 +37,6 @@ fun ImageView.loadImageWithTransform(
         if (null != error) {
             error(error)
         }
+        listener(listener)
     }
 }

@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package io.github.lee.core.ui
 
 import android.content.Context
@@ -32,7 +34,6 @@ open class BaseActivity<VB : ViewDataBinding, VM : BaseViewModel>
     }
     protected val mContent: Context by lazy { this }
 
-    @Suppress("UNCHECKED_CAST")
     protected val vb: VB? by lazy { onCreateVB() }
 
     protected val vm: VM? by lazy { onCreateVM() }

@@ -1,5 +1,6 @@
 package io.github.lee.core.ui
 
+import android.os.Bundle
 import android.view.View
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +13,7 @@ import io.github.lee.core.util.ext.observe
 import io.github.lee.core.vm.BaseRefreshViewModel
 import io.github.lee.core.vm.status.RefreshStatus
 
-open class BaseRefreshFragment<VM : BaseRefreshViewModel<*, *>>
+abstract class BaseRefreshFragment<VM : BaseRefreshViewModel<*, *>>
     : BaseFragment<LayoutBaseRefreshBinding, VM>() {
 
     override fun onCreateVB(): LayoutBaseRefreshBinding =
@@ -28,10 +29,15 @@ open class BaseRefreshFragment<VM : BaseRefreshViewModel<*, *>>
     protected var isAutoRefresh = true
 
 
-//    protected lateinit var mAdapter: BindingAdapter
+    //    protected lateinit var mAdapter: BindingAdapter
 
 
     //===Desc:=====================================================================================
+
+    override fun onInitData(savedInstanceState: Bundle?) {
+        super.onInitData(savedInstanceState)
+
+    }
 
     override fun onObserveData() {
         super.onObserveData()
@@ -76,15 +82,8 @@ open class BaseRefreshFragment<VM : BaseRefreshViewModel<*, *>>
             } else {
                 refreshContent.layoutManager = lm
             }
+
             refreshContent.adapter = vm?.adapter
-            //            val holderAdapter = onHolderAdapter()
-            //            mAdapter = if (null != holderAdapter) {
-            //                refreshContent.setup(holderAdapter)
-            //            } else {
-            //                val adapter = BindingAdapter()
-            //                refreshContent.adapter = adapter
-            //                adapter
-            //            }
         }
         vm?.apply {
             if (adapter is LoadMoreModule) {
@@ -100,18 +99,16 @@ open class BaseRefreshFragment<VM : BaseRefreshViewModel<*, *>>
                     adapter.loadMoreModule.isEnableLoadMore = false
                 }
             }
-
         }
         if (isAutoRefresh) {
-            if (enableRefresh) {
-                vb?.refresh?.isRefreshing = true
+            if (vm?.adapter?.data.isNullOrEmpty()) {
+                if (enableRefresh) {
+                    vb?.refresh?.isRefreshing = true
+                }
+                vm?.onRefreshOrLoadMord(true)
             }
-            vm?.onRefreshOrLoadMord(true)
         }
     }
-
-    //    protected open fun onHolderAdapter(): (BindingAdapter.(RecyclerView) -> Unit)? = null
-
 
     //===Desc:=====================================================================================
 
@@ -125,7 +122,6 @@ open class BaseRefreshFragment<VM : BaseRefreshViewModel<*, *>>
         vb?.refresh?.isRefreshing = false
     }
 
-    //
     protected fun loadMoreComplete() =
         vm?.adapter?.loadMoreModule?.loadMoreComplete()
 
@@ -146,6 +142,11 @@ open class BaseRefreshFragment<VM : BaseRefreshViewModel<*, *>>
         getRecyclerView()?.addItemDecoration(decor, index)
     }
 
+    override fun showError(msg: String?) {
+        super.showError(msg)
+
+
+    }
     //===Desc:=====================================================================================
 
     protected fun addHeaderView(header: View) {

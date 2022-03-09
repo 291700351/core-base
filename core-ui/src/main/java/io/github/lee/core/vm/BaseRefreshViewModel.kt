@@ -6,6 +6,7 @@ import androidx.annotation.IntRange
 import androidx.lifecycle.MutableLiveData
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import io.github.lee.core.vm.status.PageStatusData
 import io.github.lee.core.vm.status.RefreshStatusData
 
 /**下拉刷新  上拉加载相关的ViewModel*/
@@ -43,6 +44,7 @@ abstract class BaseRefreshViewModel<T, VH : BaseViewHolder>(application: Applica
 
     protected fun loadMoreFail() =
         refreshLiveData.postValue(RefreshStatusData.loadMoreFail())
+
 
     //===Desc:=====================================================================================
     fun setNewData(list: List<T>) {

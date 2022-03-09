@@ -1,0 +1,122 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
+
+}
+
+android {
+    compileSdk Integer.parseInt(COMPILE_SDK)
+
+    defaultConfig {
+        applicationId UNSPLASH_APPLICATION_ID
+        minSdk Integer.parseInt(MIN_SDK)
+        targetSdk Integer.parseInt(TARGET_SDK)
+        versionCode Integer.parseInt(APP_VERSION_CODE)
+        versionName APP_VERSION_NAME
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+    buildFeatures {
+        dataBinding = true
+    }
+
+    signingConfigs {
+        //加载签名配置文件
+        config {
+            storeFile file(rootDir.getAbsolutePath() + File.separator + "sign" + File.separator + "key.jks")
+            storePassword "123456"
+            keyAlias "Unsplash"
+            keyPassword "123456"
+            setV1SigningEnabled(true)
+            setV2SigningEnabled(true)
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+            //            shrinkResources true
+            zipAlignEnabled true
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+            multiDexEnabled true
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+            shrinkResources true
+            zipAlignEnabled true
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            multiDexEnabled true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    lint{
+        baseline = file("lint-baseline.xml")
+    }
+    lintOptions {
+        showAll = true
+//        abortOnError = false
+        disable = [
+                "Instantiatable", //解决清单文件Activity继承的警告
+                "UnusedResources", //资源未使用的警告
+                "MissingClass",
+                "IconXmlAndPng",
+                "MissingRegistered"
+        ]
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+    implementation 'androidx.activity:activity-compose:1.3.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation project(":core-ui")
+
+    // Hilt Support
+    implementation 'com.google.dagger:hilt-android:2.41'
+    kapt 'com.google.dagger:hilt-android-compiler:2.41'
+
+    // Network
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.5'
+
+    // Room Support
+    kapt "androidx.room:room-compiler:2.4.1"
+
+    // PhotoView Support
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+
+}

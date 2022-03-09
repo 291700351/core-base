@@ -2,4 +2,6 @@
 <resources>
     <string name="core_data_empty">暂无数据</string>
     <string name="core_data_error">数据错误</string>
+    <string name="core_response_throwable_format">错误码 ： %d， 错误信息 ： %s</string>
+
 </resources>

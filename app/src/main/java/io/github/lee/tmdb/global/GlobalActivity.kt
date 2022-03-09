@@ -12,13 +12,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.lee.core.ui.BaseActivity
-import io.github.lee.core.util.ext.log
 import io.github.lee.core.vm.BaseViewModel
 import io.github.lee.tmdb.BuildConfig
 import io.github.lee.tmdb.R
 import io.github.lee.tmdb.databinding.ActivityGlobalBinding
-import io.github.lee.tmdb.main.MainFragment
-import io.github.lee.tmdb.splash.SplashFragment
+import io.github.lee.tmdb.ui.main.MainFragment
+import io.github.lee.tmdb.ui.splash.SplashFragment
 
 private const val TIME_DIFF = 2 * 1000L
 private const val TIME_DELAY = 3 * 1000L

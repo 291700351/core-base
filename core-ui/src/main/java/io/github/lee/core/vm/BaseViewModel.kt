@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import io.github.lee.core.ui.BuildConfig
+import io.github.lee.core.util.LoggerUtil
 import io.github.lee.core.vm.exceptions.ResponseThrowable
 import io.github.lee.core.vm.exceptions.resultIsNull
 import io.github.lee.core.vm.exceptions.systemError
@@ -33,7 +35,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         pageStatusLiveData.postValue(PageStatusData.empty(msg))
 
 
-    fun showError(msg: String? = "") =
+    open fun showError(msg: String? = "") =
         pageStatusLiveData.postValue(PageStatusData.error(msg))
 
     fun showProgress() =
@@ -66,16 +68,20 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     suspend fun <T> withContextMain(block: suspend CoroutineScope.() -> T) =
         withContext(Dispatchers.Main) { block }
 
+
     fun <T> launchResult(
         block: suspend CoroutineScope.() -> T?,
-        success: CoroutineScope.(T) -> Unit = { _ -> },
-        error: CoroutineScope.(ResponseThrowable) -> Unit = { _ -> }
+        success: suspend CoroutineScope.(T) -> Unit = { },
+        error: suspend CoroutineScope.(ResponseThrowable) -> Unit = { }
     ) {
         val handler = CoroutineExceptionHandler { _, throwable ->
             launchOnUI {
                 if (throwable is ResponseThrowable) {
                     error(throwable)
                 } else {
+                    if (BuildConfig.DEBUG) {
+                        throwable.printStackTrace()
+                    }
                     val msg = throwable.message
                     if (msg.isNullOrEmpty()) {
                         error(unknownError())
@@ -85,14 +91,15 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
                 }
             }
         }
+
         launchOnUI(handler) {
-            block().also {
-                if (null == it) {
-                    error(resultIsNull())
-                } else {
-                    success(it)
-                }
+            val result = withContext(Dispatchers.IO) { block() }
+            if (null == result) {
+                error(resultIsNull())
+            } else {
+                success(result)
             }
+
         }
     }
 }

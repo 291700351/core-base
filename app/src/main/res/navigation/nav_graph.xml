@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="io.github.lee.tmdb.splash.SplashFragment"
+        android:name="io.github.lee.tmdb.ui.splash.SplashFragment"
         android:label="SplashFragment"
         tools:layout="@layout/fragment_splash">
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
-        android:name="io.github.lee.tmdb.main.MainFragment"
+        android:name="io.github.lee.tmdb.ui.main.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
 
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/a2"
-        android:name="io.github.lee.tmdb.main.A"
+        android:name="io.github.lee.tmdb.ui.main.A"
         android:label="A" >
         <action
             android:id="@+id/action_a2_to_b"
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/b"
-        android:name="io.github.lee.tmdb.main.B"
+        android:name="io.github.lee.tmdb.ui.main.B"
         android:label="B" />
 
 </navigation>

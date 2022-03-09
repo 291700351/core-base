@@ -44,6 +44,19 @@ android {
         jvmTarget = '1.8'
     }
 
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+    lintOptions {
+        showAll = true
+        abortOnError = false
+        disable = [
+                "Instantiatable", //解决清单文件Activity继承的警告
+                "UnusedResources", //资源未使用的警告
+                "MissingRegistered"
+        ]
+    }
+
 }
 
 dependencies {
@@ -52,6 +65,7 @@ dependencies {
     api 'com.google.android.material:material:1.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    api "androidx.recyclerview:recyclerview:1.2.1"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
@@ -61,7 +75,7 @@ dependencies {
     api "com.orhanobut:logger:2.2.0"
 
     // StatusBar StatusBar Support
-    //    api 'com.gitee.zackratos:UltimateBarX:0.8.0'
+    // api 'com.gitee.zackratos:UltimateBarX:0.8.0'
     api("com.github.niorgai:StatusBarCompat:2.3.3", {
         exclude group: "androidx.appcompat:appcompat"
         exclude group: "com.google.android.material:material"

@@ -22,10 +22,6 @@ object DatabaseModule {
         ).build()
     }
 
-    //    @Singleton
-    //    @Provides
-    //    fun provideTestDao(database: AppDatabase): TestDao {
-    //        return database.testDao()
-    //    }
+
 
 }
